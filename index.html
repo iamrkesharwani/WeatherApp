@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+  </head>
+  <body
+    class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen overflow-y-auto"
+  >
+    <div class="max-w-7xl mx-auto p-4">
+      <!-- Header with title and controls -->
+      <div
+        class="bg-slate-800 bg-opacity-40 backdrop-blur-lg rounded-2xl p-6 mb-6 border border-cyan-500 border-opacity-20"
+      >
+        <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
+          <h1
+            id="headerTitle"
+            class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-cyan-500"
+          >
+            Weather Dashboard
+          </h1>
+          <!-- Temperature unit toggle and location button -->
+          <div class="flex gap-3">
+            <button
+              id="tempToggleBtn"
+              class="bg-slate-700 bg-opacity-50 border border-cyan-500 border-opacity-30 hover:border-opacity-60 text-white px-4 py-2 rounded-lg transition-all duration-300"
+            >
+              °C ⇄ °F
+            </button>
+            <button
+              id="locationBtn"
+              class="bg-gradient-to-r from-cyan-600 to-cyan-500 hover:shadow-md hover:shadow-cyan-500/50 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition-all duration-300"
+            >
+              <i class="bi bi-geo-alt"></i>
+              My Location
+            </button>
+          </div>
+        </div>
+
+        <!-- City search input -->
+        <div class="flex gap-3 mb-4">
+          <input
+            id="cityInput"
+            type="text"
+            placeholder="Search for a city..."
+            class="flex-1 bg-slate-700 bg-opacity-50 border border-cyan-500 border-opacity-30 focus:border-opacity-80 focus:outline-none focus:shadow-md focus:shadow-cyan-500/30 text-white placeholder-slate-400 px-4 py-3 rounded-xl transition-all duration-300"
+          />
+          <button
+            id="searchBtn"
+            class="bg-gradient-to-r from-cyan-600 to-cyan-500 hover:shadow-md hover:shadow-cyan-500/50 text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 transition-all duration-300"
+          >
+            <i class="bi bi-search"></i>
+            Search
+          </button>
+        </div>
+
+        <!-- Favorite cities shortcuts -->
+        <div class="flex gap-2 flex-wrap">
+          <span class="text-cyan-300 text-sm self-center">Favorites:</span>
+          <div class="flex gap-2" id="favorites">
+            <button
+              class="bg-slate-700 bg-opacity-30 hover:bg-opacity-50 border border-cyan-500 border-opacity-20 hover:border-opacity-50 text-cyan-300 px-3 py-1 rounded-lg text-sm transition-all duration-300"
+            >
+              ABC
+            </button>
+          </div>
+          <p
+            id="favoritesError"
+            class="text-red-400 text-sm self-center hidden"
+          >
+            You can only add 5 favorites
+          </p>
+        </div>
+      </div>
+
+      <!-- Loading spinner (hidden by default) -->
+      <div
+        id="loading"
+        class="bg-slate-800 bg-opacity-40 backdrop-blur-lg rounded-2xl p-12 text-center mb-6 border border-cyan-500 border-opacity-20 hidden"
+      >
+        <div
+          class="inline-block w-12 h-12 border-4 border-slate-600 border-t-cyan-500 rounded-full animate-spin mb-4"
+        ></div>
+        <p class="text-cyan-300 text-lg">Loading weather data...</p>
+      </div>
+
+      <!-- Error message (hidden by default) -->
+      <div
+        id="error"
+        class="bg-red-950 bg-opacity-40 backdrop-blur-lg rounded-2xl p-6 border border-red-500 border-opacity-40 mb-6 hidden"
+      >
+        <div class="flex items-center gap-4">
+          <i class="bi bi-exclamation-circle text-red-400 text-2xl"></i>
+          <p class="text-red-200 text-lg">City not found. Please try again.</p>
+        </div>
+      </div>
+
+      <!-- Current weather display -->
+      <div
+        id="currentWeather"
+        class="bg-slate-800 bg-opacity-40 backdrop-blur-lg rounded-2xl p-8 mb-6 border border-cyan-500 border-opacity-20"
+      >
+        <div class="flex flex-wrap justify-between items-start mb-6 gap-4">
+          <div>
+            <div class="flex items-center gap-3 mb-2">
+              <h2 id="cityName" class="text-4xl font-bold text-white">ABC</h2>
+              <!-- Add to favorites button -->
+              <button
+                id="addFavBtn"
+                class="text-cyan-400 hover:text-cyan-300 transition-colors duration-300"
+              >
+                <i class="bi bi-star-fill text-xl"></i>
+              </button>
+            </div>
+            <p id="countryName" class="text-cyan-300 text-lg">ABC</p>
+          </div>
+          <!-- Temperature and condition display -->
+          <div class="text-right">
+            <p id="temperature" class="text-6xl font-bold text-white">00°C</p>
+            <p id="weatherCondition" class="text-cyan-300 text-lg mt-2">ABC</p>
+          </div>
+        </div>
+
+        <!-- Weather metrics grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <!-- Humidity stat -->
+          <div
+            class="bg-slate-700 bg-opacity-30 border border-cyan-500 border-opacity-20 hover:border-opacity-50 hover:bg-opacity-40 rounded-xl p-4 transition-all duration-300"
+          >
+            <div class="flex items-center gap-2 mb-2">
+              <i class="bi bi-droplet-fill text-cyan-400"></i>
+              <span class="text-cyan-300 text-sm">Humidity</span>
+            </div>
+            <p id="humidityValue" class="text-2xl font-bold text-white">00%</p>
+          </div>
+
+          <!-- Wind speed stat -->
+          <div
+            class="bg-slate-700 bg-opacity-30 border border-cyan-500 border-opacity-20 hover:border-opacity-50 hover:bg-opacity-40 rounded-xl p-4 transition-all duration-300"
+          >
+            <div class="flex items-center gap-2 mb-2">
+              <i class="bi bi-wind text-cyan-400"></i>
+              <span class="text-cyan-300 text-sm">Wind Speed</span>
+            </div>
+            <p id="windValue" class="text-2xl font-bold text-white">00 km/h</p>
+          </div>
+
+          <!-- Visibility stat -->
+          <div
+            class="bg-slate-700 bg-opacity-30 border border-cyan-500 border-opacity-20 hover:border-opacity-50 hover:bg-opacity-40 rounded-xl p-4 transition-all duration-300"
+          >
+            <div class="flex items-center gap-2 mb-2">
+              <i class="bi bi-eye-fill text-cyan-400"></i>
+              <span class="text-cyan-300 text-sm">Visibility</span>
+            </div>
+            <p id="visibilityValue" class="text-2xl font-bold text-white">
+              00 km
+            </p>
+          </div>
+
+          <!-- Pressure stat -->
+          <div
+            class="bg-slate-700 bg-opacity-30 border border-cyan-500 border-opacity-20 hover:border-opacity-50 hover:bg-opacity-40 rounded-xl p-4 transition-all duration-300"
+          >
+            <div class="flex items-center gap-2 mb-2">
+              <i class="bi bi-speedometer2 text-cyan-400"></i>
+              <span class="text-cyan-300 text-sm">Pressure</span>
+            </div>
+            <p id="pressureValue" class="text-2xl font-bold text-white">
+              00 hPa
+            </p>
+          </div>
+        </div>
+
+        <!-- Additional weather information -->
+        <div class="flex flex-wrap justify-between text-sm text-cyan-300 gap-4">
+          <p>Feels like: <span id="feelsLike">00°C</span></p>
+          <p>
+            <span>Min: </span><span id="minTemp">00°C</span>
+            <span>/ Max:</span>
+            <span id="maxTemp">00°C</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Auto-refresh toggle -->
+      <div class="mt-4 text-center" id="autoRefreshSection">
+        <label
+          class="inline-flex items-center gap-2 text-cyan-300 cursor-pointer hover:text-cyan-200 transition-colors duration-300"
+        >
+          <input
+            id="autoRefreshToggle"
+            type="checkbox"
+            class="w-4 h-4 rounded accent-cyan-500"
+          />
+          <span>Auto-refresh every minute -</span>
+          <p id="refreshCountdown" class="text-cyan-300">Auto-refresh paused</p>
+        </label>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
